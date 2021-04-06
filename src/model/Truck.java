@@ -15,7 +15,7 @@ public class Truck extends AbstractCollection{
     private synchronized void unLoad(){
         System.out.println("Truck has gone!" + this);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

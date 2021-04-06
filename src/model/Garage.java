@@ -31,7 +31,7 @@ public class Garage {
                 e.printStackTrace();
             }
         }
-        trucks.get(getReadyIndex()).pushItem(as);
+        (new Thread(() -> {trucks.get(getReadyIndex()).pushItem(as);})).start();
         System.out.println("Ready index is " + getReadyIndex());
         notify();
     }
