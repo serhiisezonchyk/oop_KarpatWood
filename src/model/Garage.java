@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Garage {
     private List<Truck> trucks;
+    private int priorityTruck = 0;
 
     public Garage(int capacity) {
         trucks = new CopyOnWriteArrayList<>();
@@ -14,9 +15,13 @@ public class Garage {
 
 
     public int getReadyIndex(){
+        // load already loaded Truck
+        if (trucks.get(priorityTruck).isReady()) {
+            return priorityTruck;
+        }
         for (int i = 0; i < trucks.size(); i++) {
             if (trucks.get(i).isReady()) {
-                System.out.println(i);
+                priorityTruck = i;
                 return i;
             }
         }
@@ -26,7 +31,7 @@ public class Garage {
     public synchronized void fillGarage(IWooden as){
         while (getReadyIndex() == -1){
             try {
-                wait();
+                wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

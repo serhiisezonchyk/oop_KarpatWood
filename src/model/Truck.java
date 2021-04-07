@@ -15,14 +15,14 @@ public class Truck extends AbstractCollection{
     private synchronized void unLoad(){
         System.out.println("Truck has gone!" + this);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         raws.removeAll(raws);
-        notify();
         System.out.println("Truck has returned!" + this);
         isReady = true;
+        notify();
     }
 
     public synchronized void pushItem(IWooden stem) {
