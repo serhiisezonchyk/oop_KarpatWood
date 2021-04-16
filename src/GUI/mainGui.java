@@ -1,10 +1,10 @@
 package GUI;
 
 
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
+import model.RawCollection;
+import model.WoodWorker;
+
+import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -85,11 +85,16 @@ public class mainGui {
 	private JSpinner spinner;
 	private JLabel tree1;
 
+	RawCollection rc = new RawCollection((short)5);
+	private WoodWorker ww;
+
 	public void person_active(JLabel person,boolean flag) {
 		if(!flag) {
 			person.setIcon(new ImageIcon(urlPerson));
 		} else {
 			person.setIcon(new ImageIcon(urlPersonActive));
+			ww = new WoodWorker(rc, person.getX(), person.getY()/6+person.getY(), lblRaw.getX(), lblRaw.getY(), (Graphics2D) frame.getGraphics(), frame);
+			new Thread(ww).start();
 		}
 	}
 
