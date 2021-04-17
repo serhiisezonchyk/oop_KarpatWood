@@ -1,5 +1,9 @@
 package model;
 
+import GUI.mainGui;
+
+import javax.swing.*;
+
 public class Truck extends AbstractCollection{
 
     private boolean isReady = true;
@@ -8,8 +12,8 @@ public class Truck extends AbstractCollection{
         return isReady;
     }
 
-    public Truck(short capacity) {
-        super(capacity);
+    public Truck(short capacity, JLabel lbl, mainGui mg) {
+        super(capacity, lbl, mg);
     }
 
     private synchronized void unLoad(){

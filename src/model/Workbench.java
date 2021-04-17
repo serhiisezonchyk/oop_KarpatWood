@@ -1,10 +1,14 @@
 package model;
 
+import GUI.mainGui;
+
+import javax.swing.*;
+
 public class Workbench extends AbstractWorker{
     TimberCollection tc;
 
-    public Workbench(RawCollection rc, TimberCollection tc) {
-        super(rc);
+    public Workbench(RawCollection rc, TimberCollection tc, JLabel lbl, mainGui mg) {
+        super(rc, lbl, mg);
         this.tc = tc;
         System.out.println(this.tc);
     }
@@ -32,7 +36,9 @@ public class Workbench extends AbstractWorker{
                 System.out.println("Timber produced = " + timber);
                 transport(timber);
                 getTime();
-                Thread.sleep(time);
+                //Thread.sleep(time);
+                mg.drawAnimation(lbl, mg.lblExportbox);
+
                 System.out.println("Transported!" + timber);
 
             } catch (InterruptedException e) {

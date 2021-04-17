@@ -1,14 +1,21 @@
 package model;
 
+import GUI.mainGui;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AbstractCollection {
     protected short maxLength;
     protected List raws;
+    JLabel lbl;
+    mainGui mg;
 
-    public AbstractCollection(short maxLength) {
+    public AbstractCollection(short maxLength, JLabel lbl, mainGui mg) {
         this.maxLength = maxLength;raws = new CopyOnWriteArrayList();
+        this.lbl = lbl;
+        this.mg = mg;
     }
 
     public synchronized void pushItem(IWooden stem) {
@@ -19,6 +26,7 @@ public abstract class AbstractCollection {
             }
         }
         raws.add(stem);
+        mg.drawAnimation(lbl,mg.lblMachine1);
         notify();
     }
 

@@ -1,16 +1,23 @@
 package model;
 
+import GUI.mainGui;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Garage {
     private List<Truck> trucks;
     private int priorityTruck = 0;
+    JLabel lbl;
+    mainGui mg;
 
-    public Garage(int capacity) {
+    public Garage(int capacity, JLabel lbl, mainGui mg) {
+        this.lbl = lbl;
+        this.mg = mg;
         trucks = new CopyOnWriteArrayList<>();
         for (int i = 0; i < capacity; i++)
-            trucks.add(new Truck((short)5));
+            trucks.add(new Truck((short)5, lbl, mg));
     }
 
 

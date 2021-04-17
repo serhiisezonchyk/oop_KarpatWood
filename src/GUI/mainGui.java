@@ -1,8 +1,7 @@
 package GUI;
 
 
-import model.RawCollection;
-import model.WoodWorker;
+import model.*;
 
 import java.awt.*;
 import javax.swing.JFrame;
@@ -85,15 +84,46 @@ public class mainGui {
 	private JSpinner spinner;
 	private JLabel tree1;
 
-	RawCollection rc = new RawCollection((short)5);
+	RawCollection rc;
 	private WoodWorker ww;
+	private Workbench wb;
+	TimberCollection tc;
+	Garage gr;
+
+	public void drawAnimation(JLabel src, JLabel dst){
+		int x = src.getX();
+		int y = src.getY();
+		int x2 = dst.getX();
+		int y2 = dst.getY();
+		Graphics2D g2d = (Graphics2D) frame.getGraphics();
+		(new Thread(() -> {
+			for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
+				g2d.setColor(Color.CYAN);
+				// you can draw a rectangle
+				g2d.fillRect(sx,sy, 40,40);
+				// or try to draw an image
+				//g2d.drawImage(getImage(), sx, sy, null);
+				try {
+					Thread.sleep(1000/120);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				g2d.setColor(Color.WHITE);
+				// if you'll draw a rectangle, please fix the size of it
+				//g2d.fillRect(sx,sy, 236,58);
+				g2d.fillRect(sx,sy, 40,40);
+			}
+		})).start();
+	}
 
 	public void person_active(JLabel person,boolean flag) {
 		if(!flag) {
 			person.setIcon(new ImageIcon(urlPerson));
 		} else {
+			if (rc == null)
+				rc = new RawCollection((short)5, lblRaw, this);
 			person.setIcon(new ImageIcon(urlPersonActive));
-			ww = new WoodWorker(rc, person.getX(), person.getY()/6+person.getY(), lblRaw.getX(), lblRaw.getY(), (Graphics2D) frame.getGraphics(), frame);
+			ww = new WoodWorker(rc, person, this);
 			new Thread(ww).start();
 		}
 	}
@@ -102,7 +132,13 @@ public class mainGui {
 		if(!flag) {
 			machine.setIcon(new ImageIcon(urlMachine));
 		} else {
+			if (gr == null)
+				gr = new Garage((short)5, lblCar1, this);
+			if (tc == null)
+				tc = new TimberCollection((short)5, gr, lblExportbox, this);
 			machine.setIcon(new ImageIcon(urlMachineActive));
+			wb = new Workbench(rc,tc, machine, this);
+			new Thread(wb).start();
 		}
 	}
 
@@ -202,7 +238,7 @@ public class mainGui {
 		JButton btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				car1_active(0);
 				car2_active(0);
 				rawbox_count(rawCount);
