@@ -36,17 +36,6 @@ public class WoodWorker extends AbstractWorker {
         rc.pushItem(stem);
     }
 
-    private Image getImage(){
-        BufferedImage img = null;
-        try {
-            URL url = WoodWorker.class.getResource("../png/brus.png");
-            img = ImageIO.read(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return img;
-    }
-
     private Image img = null;
     {
         img = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/png/fon.png"));
