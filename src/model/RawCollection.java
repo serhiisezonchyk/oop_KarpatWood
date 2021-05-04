@@ -8,8 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RawCollection extends AbstractCollection {
 
-    public RawCollection(short maxLength, JLabel lbl, mainGui mg) {
-        super(maxLength, lbl, mg);
+    public RawCollection(short maxLength, JLabel lbl, mainGui mg, JSlider slider) {
+        super(maxLength, lbl, mg,slider);
     }
 
     @Override

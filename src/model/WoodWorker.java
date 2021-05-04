@@ -17,8 +17,8 @@ public class WoodWorker extends AbstractWorker {
     static int id = 0;
     private Graphics2D g2d;
 
-    public WoodWorker(RawCollection rc, JLabel lbl, mainGui mg) {
-        super(rc, lbl, mg);
+    public WoodWorker(int time,RawCollection rc, JLabel lbl, mainGui mg) {
+        super(time,rc, lbl, mg);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class WoodWorker extends AbstractWorker {
     public void run() {
         while (true) {
             try {
-                getTime();
+ 
                 Thread.sleep(time);
                 Object stem;
                 synchronized (Stem.class) {
@@ -53,7 +53,6 @@ public class WoodWorker extends AbstractWorker {
                     stem = new Stem(WoodWorker.id);
                 }
                 System.out.println("Produced!" + time + stem);
-                getTime();
                 Thread.sleep(time);
                 transport((Stem) stem);
                 System.out.println("Transported!" + time + stem);

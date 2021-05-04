@@ -6,8 +6,8 @@ import javax.swing.*;
 
 public class TimberCollection extends AbstractCollection{
     Garage garage;
-    public TimberCollection(short maxLength, Garage garage, JLabel lbl, mainGui mg) {
-        super(maxLength, lbl, mg);
+    public TimberCollection(short maxLength, Garage garage, JLabel lbl, mainGui mg,JSlider slider) {
+        super(maxLength, lbl, mg,slider);
         this.garage = garage;
     }
 

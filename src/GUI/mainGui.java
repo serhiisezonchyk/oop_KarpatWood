@@ -7,14 +7,22 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-
-
+import javax.imageio.ImageIO;
+import javax.print.DocFlavor.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
+import javax.swing.RepaintManager;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
+
 
 
 public class mainGui {
@@ -79,9 +87,15 @@ public class mainGui {
 	java.net.URL urlPersonActive = mainGui.class.getResource("/gifs/person.gif");
 	java.net.URL urlMachineActive = mainGui.class.getResource("/gifs/Machine1.gif");
 	java.net.URL urlTreeActive = mainGui.class.getResource("/gifs/treee.gif");
+
+	java.net.URL urlSound = mainGui.class.getResource("/music/mario.wav");
+	Sound sound =  new Sound(urlSound);
+	Thread t1;
+	
+	Thread tm1;
+	Thread tm2;
 	private JLabel lblRiver;
 	private JLabel lblRaw1;
-	private JSpinner spinner;
 	private JLabel tree1;
 
 	RawCollection rc;
@@ -89,6 +103,21 @@ public class mainGui {
 	private Workbench wb;
 	TimberCollection tc;
 	Garage gr;
+	private JSpinner spinner_3;
+	private JSpinner spinner_4;
+	private JLabel lblTimeOfWork_1;
+	private JLabel lblTimeOfWork_3;
+	private JSpinner spinner_5;
+	private JSpinner spinner_6;
+	private JLabel lblTimeOfWork_4;
+	private JLabel lblTimeOfWork_5;
+	private JSlider slider;
+	private JSlider slider_1;
+	private JButton btnStop;
+	private JSpinner spinner;
+	private JSpinner spinner_1;
+	private JSpinner spinner_2;
+	private JButton btnStart;
 
 	public void drawAnimation(JLabel src, JLabel dst){
 		int x = src.getX();
@@ -98,46 +127,59 @@ public class mainGui {
 		Graphics2D g2d = (Graphics2D) frame.getGraphics();
 		(new Thread(() -> {
 			for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
-				g2d.setColor(Color.CYAN);
+				//g2d.setColor(Color.CYAN);
 				// you can draw a rectangle
-				g2d.fillRect(sx,sy, 40,40);
+				//g2d.fillRect(sx,sy, 40,40);
 				// or try to draw an image
-				//g2d.drawImage(getImage(), sx, sy, null);
+				ImageIcon im= new ImageIcon(getImage());
+
+				g2d.drawImage(getImage(), sx, sy, null);
 				try {
 					Thread.sleep(1000/120);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				g2d.setColor(Color.WHITE);
+
+				panel.repaint(sx, sy, 100, 200);
 				// if you'll draw a rectangle, please fix the size of it
 				//g2d.fillRect(sx,sy, 236,58);
-				g2d.fillRect(sx,sy, 40,40);
+				//g2d.fillRect(sx,sy, 40,40);
 			}
 		})).start();
 	}
 
-	public void person_active(JLabel person,boolean flag) {
+	private Image getImage(){
+		Image img = null;
+		try {
+			java.net.URL url = WoodWorker.class.getResource("../png/brus.png");
+			img = ImageIO.read(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return img;
+	}
+	public void person_active(int timeOfWork,JLabel person,boolean flag) {
 		if(!flag) {
 			person.setIcon(new ImageIcon(urlPerson));
 		} else {
 			if (rc == null)
-				rc = new RawCollection((short)5, lblRaw, this);
+				rc = new RawCollection((short)5, lblRaw, this,slider);
 			person.setIcon(new ImageIcon(urlPersonActive));
-			ww = new WoodWorker(rc, person, this);
+			ww = new WoodWorker(timeOfWork,rc, person, this);
 			new Thread(ww).start();
 		}
 	}
 
-	public void machine_active(JLabel machine,boolean flag) {
+	public void machine_active(int size,JLabel machine,boolean flag) {
 		if(!flag) {
 			machine.setIcon(new ImageIcon(urlMachine));
 		} else {
 			if (gr == null)
-				gr = new Garage((short)5, lblCar1, this);
+				gr = new Garage(size, lblCar1, this);
 			if (tc == null)
-				tc = new TimberCollection((short)5, gr, lblExportbox, this);
+				tc = new TimberCollection((short)size, gr, lblExportbox, this,slider_1);
 			machine.setIcon(new ImageIcon(urlMachineActive));
-			wb = new Workbench(rc,tc, machine, this);
+			wb = new Workbench(0,rc,tc, machine, this);
 			new Thread(wb).start();
 		}
 	}
@@ -163,7 +205,6 @@ public class mainGui {
 		case 0:
 			lblCar1.setIcon(new ImageIcon(urlCar1close));
 			break;
-
 		case 1:
 			lblCar1.setIcon(new ImageIcon(urlCar1open));
 			break;
@@ -231,44 +272,20 @@ public class mainGui {
 		}
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle("Project of Sergey Sezonchyk (Karpat Wood)");
+		frame.setTitle("Project of Sergey Sezonchyk and Stanislav Pinchuk (Karpat Wood)");
 		frame.setContentPane(panel);
 		panel.setLayout(null);
-
-		JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				car1_active(0);
-				car2_active(0);
-				rawbox_count(rawCount);
-				tree_active(tree1, true);
-				tree_active(tree2, true);
-				tree_active(tree3, true);
-				person_active(lblperson1, true);
-				person_active(lblperson2, true);
-				person_active(lblperson3, true);
-				machine_active(lblMachine1, true);
-				machine_active(lblMachine2, true);
-			}
-		});
-		btnStart.setBounds(1577, 967, 129, 43);
-		panel.add(btnStart);
-
-		JButton btnStop = new JButton("Stop");
-		btnStop.setBounds(1740, 967, 113, 43);
-		panel.add(btnStop);
 
 		lblRiver = new JLabel("");
 		lblRiver.setBounds(319, 872, 669, 149);
 		panel.add(lblRiver);
-		
+
 		lblCar1 = new JLabel("");
 		lblCar1.setBounds(1534, -12, 348, 532);
 		panel.add(lblCar1);
 
 		lblCar2 = new JLabel("");
-		lblCar2.setBounds(1534, 437, 348, 573);
+		lblCar2.setBounds(1544, 437, 348, 573);
 		panel.add(lblCar2);
 
 		tree2 = new JLabel("");
@@ -306,18 +323,177 @@ public class mainGui {
 		lblExportbox = new JLabel("");
 		lblExportbox.setBounds(1167, 458, 317, 176);
 		panel.add(lblExportbox);
-		
+
 		lblRaw1 = new JLabel("");
 		lblRaw1.setBounds(156, 261, 46, 14);
 		panel.add(lblRaw1);
-		
-		spinner = new JSpinner();
-		spinner.setBounds(1229, 797, 29, 20);
-		panel.add(spinner);
-		
+
 		tree1 = new JLabel("");
 		tree1.setBounds(64, 69, 186, 249);
 		panel.add(tree1);
+
+		spinner = new JSpinner();
+		spinner.setBounds(10, 126, 62, 20);
+		panel.add(spinner);
+
+		spinner_1 = new JSpinner();
+		spinner_1.setBounds(10, 417, 62, 20);
+		panel.add(spinner_1);
+
+		spinner_2 = new JSpinner();
+		spinner_2.setBounds(10, 772, 65, 20);
+		panel.add(spinner_2);
+
+		JLabel lblNewLabel = new JLabel("Time of work 1st");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setBounds(8, 101, 131, 14);
+		panel.add(lblNewLabel);
+
+		JLabel lblTimeOfWork = new JLabel("Time of work 2nd");
+		lblTimeOfWork.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork.setForeground(Color.WHITE);
+		lblTimeOfWork.setBounds(10, 392, 129, 14);
+		panel.add(lblTimeOfWork);
+
+		JLabel lblTimeOfWork_2 = new JLabel("Time of work 3rd");
+		lblTimeOfWork_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork_2.setForeground(Color.WHITE);
+		lblTimeOfWork_2.setBounds(10, 746, 129, 14);
+		panel.add(lblTimeOfWork_2);
+
+		spinner_3 = new JSpinner();
+		spinner_3.setBounds(863, 417, 62, 20);
+		panel.add(spinner_3);
+
+		spinner_4 = new JSpinner();
+		spinner_4.setBounds(863, 922, 62, 20);
+		panel.add(spinner_4);
+
+		lblTimeOfWork_1 = new JLabel("Handling  2nd");
+		lblTimeOfWork_1.setForeground(Color.BLACK);
+		lblTimeOfWork_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork_1.setBounds(935, 925, 129, 14);
+		panel.add(lblTimeOfWork_1);
+
+		lblTimeOfWork_3 = new JLabel("Handling  1st");
+		lblTimeOfWork_3.setForeground(Color.BLACK);
+		lblTimeOfWork_3.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork_3.setBounds(935, 420, 129, 14);
+		panel.add(lblTimeOfWork_3);
+
+		slider = new JSlider();
+		slider.setSnapToTicks(true);
+		slider.setMaximum(15);
+		slider.setForeground(Color.WHITE);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setOrientation(SwingConstants.VERTICAL);
+		slider.setBounds(1100, 838, 62, 160);
+		panel.add(slider);
+
+		slider_1 = new JSlider();
+		slider_1.setSnapToTicks(true);
+		slider_1.setPaintTicks(true);
+		slider_1.setPaintLabels(true);
+		slider_1.setOrientation(SwingConstants.VERTICAL);
+		slider_1.setMaximum(15);
+		slider_1.setForeground(Color.WHITE);
+		slider_1.setBounds(1177, 838, 62, 160);
+		panel.add(slider_1);
+
+		JLabel lblNewLabel_1 = new JLabel("Raw count");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_1.setBounds(1100, 805, 62, 14);
+		panel.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Export count");
+		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNewLabel_1_1.setBounds(1177, 805, 76, 14);
+		panel.add(lblNewLabel_1_1);
+
+		JSpinner spinner_4_1 = new JSpinner();
+		spinner_4_1.setBounds(1534, 479, 62, 20);
+		panel.add(spinner_4_1);
+
+		JSpinner spinner_4_1_1 = new JSpinner();
+		spinner_4_1_1.setBounds(1534, 636, 62, 20);
+		panel.add(spinner_4_1_1);
+
+		JLabel lblNewLabel_2 = new JLabel("Count in 1st auto");
+		lblNewLabel_2.setForeground(Color.WHITE);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_2.setBounds(1522, 454, 131, 14);
+		panel.add(lblNewLabel_2);
+
+		JLabel lblNewLabel_2_1 = new JLabel("Count in 2nd auto");
+		lblNewLabel_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_2_1.setBounds(1522, 611, 131, 14);
+		panel.add(lblNewLabel_2_1);
+
+		spinner_5 = new JSpinner();
+		spinner_5.setBounds(1259, 882, 62, 20);
+		panel.add(spinner_5);
+
+		spinner_6 = new JSpinner();
+		spinner_6.setBounds(1259, 924, 62, 20);
+		panel.add(spinner_6);
+
+		lblTimeOfWork_4 = new JLabel("Max count in 1st car");
+		lblTimeOfWork_4.setForeground(Color.BLACK);
+		lblTimeOfWork_4.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork_4.setBounds(1330, 885, 139, 14);
+		panel.add(lblTimeOfWork_4);
+
+		lblTimeOfWork_5 = new JLabel("Max count in 2nd car");
+		lblTimeOfWork_5.setForeground(Color.BLACK);
+		lblTimeOfWork_5.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTimeOfWork_5.setBounds(1331, 925, 153, 14);
+		panel.add(lblTimeOfWork_5);
+		/*Кнопочка старт
+		 */
+		btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnStart.setEnabled(false);
+
+				spinner.setEnabled(false);
+				spinner_1.setEnabled(false);
+				spinner_2.setEnabled(false);
+				spinner_3.setEnabled(false);
+				spinner_4.setEnabled(false);
+				spinner_5.setEnabled(false);
+				spinner_6.setEnabled(false);
+				sound.play();
+				
+				Thread t1 = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						doRun();
+					}
+				});  
+				t1.start();
+			}
+		});
+		btnStart.setBounds(1577, 967, 129, 43);
+		panel.add(btnStart);
+
+/* Кнопочка стоп, пока что только выключает музыку
+ * 
+ */
+		btnStop = new JButton("Stop");
+		btnStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sound.stop();
+				sound.close();
+				sound.setVolume(0);
+				onEndOfPlay();
+			}
+		});
+		btnStop.setBounds(1740, 967, 113, 43);
+		panel.add(btnStop);
+
 
 		frame.setBounds(20, 10, 1888, 1060);
 		new Thread(()->{
@@ -327,14 +503,74 @@ public class mainGui {
 			tree_active(tree1, false);
 			tree_active(tree2, false);
 			tree_active(tree3, false);
-			person_active(lblperson1, false);
-			person_active(lblperson2, false);
-			person_active(lblperson3, false);
-			machine_active(lblMachine1, false);
-			machine_active(lblMachine2, false);
+			person_active((int)spinner.getValue(),lblperson1, false);
+			person_active((int)spinner_1.getValue(),lblperson2, false);
+			person_active((int)spinner_2.getValue(),lblperson3, false);
+			machine_active((int)spinner_5.getValue(),lblMachine1, false);
+			machine_active((int)spinner_6.getValue(),lblMachine2, false);
 			lblExportbox.setIcon(new ImageIcon(urlExportbox));
 			lblRiver.setIcon(new ImageIcon(urlRiver));
 		}).start();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	public JSlider getSlider() {
+		return slider;
+	}
+	public JSlider getSlider_1() {
+		return slider_1;
+	}
+	
+	/* Метод с запуском 
+	 * всех елеметов
+	 * (Отэто все нужно в потоки позасовывать:()
+	 */
+	protected void doRun() {
+		car1_active(0);
+		car2_active(0);
+		rawbox_count(rawCount);
+		tree_active(tree1, true);
+		tree_active(tree2, true);
+		tree_active(tree3, true);
+		person_active((int)spinner.getValue(),lblperson1, true);
+		person_active((int)spinner_2.getValue(),lblperson2, true);
+		person_active((int)spinner_3.getValue(),lblperson3, true);
+		machine_active((int)spinner_5.getValue(),lblMachine1, true);
+		machine_active((int)spinner_6.getValue(),lblMachine2, true);
+	}
+
+	/*Ожидание завершения запущенных потоков
+	 * (По идее нужно запускать каждый елемент в отдельном)
+	 */
+	private void onEndOfPlay() {
+		btnStart.setEnabled(true);
+		new Thread() {
+			public void run() {
+				try {
+					t1.join();
+					//Вообще должно здесь работать
+					//btnStart.setEnabled(true); 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}.start();
+	}
+
+	public JButton getBtnStop() {
+		return btnStop;
+	}
+	public JSpinner getSpinner() {
+		return spinner;
+	}
+	public JSpinner getSpinner_1() {
+		return spinner_1;
+	}
+	public JSpinner getSpinner_2() {
+		return spinner_2;
+	}
+	public JButton getBtnStart() {
+		return btnStart;
+	}
 }
+

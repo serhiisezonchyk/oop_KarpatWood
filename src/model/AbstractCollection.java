@@ -11,11 +11,13 @@ public abstract class AbstractCollection {
     protected List raws;
     JLabel lbl;
     mainGui mg;
-
-    public AbstractCollection(short maxLength, JLabel lbl, mainGui mg) {
-        this.maxLength = maxLength;raws = new CopyOnWriteArrayList();
+    JSlider slider;
+    public AbstractCollection(short maxLength, JLabel lbl, mainGui mg,JSlider slider) {
+        this.maxLength = maxLength;
+        raws = new CopyOnWriteArrayList();
         this.lbl = lbl;
         this.mg = mg;
+        this.slider = slider;
     }
 
     public synchronized void pushItem(IWooden stem) {
@@ -27,6 +29,7 @@ public abstract class AbstractCollection {
         }
         raws.add(stem);
         mg.drawAnimation(lbl,mg.lblMachine1);
+        slider.setValue(raws.size());
         notify();
     }
 
@@ -43,6 +46,7 @@ public abstract class AbstractCollection {
         }
         AbstractWood item = (AbstractWood)raws.get(raws.size() - 1);
         raws.remove(raws.size() - 1);
+        slider.setValue(raws.size());
         notify();
         return item;
     }

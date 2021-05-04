@@ -13,7 +13,7 @@ public class Truck extends AbstractCollection{
     }
 
     public Truck(short capacity, JLabel lbl, mainGui mg) {
-        super(capacity, lbl, mg);
+        super(capacity, lbl, mg,null);
     }
 
     private synchronized void unLoad(){
