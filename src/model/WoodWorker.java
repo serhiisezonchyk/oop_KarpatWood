@@ -45,9 +45,9 @@ public class WoodWorker extends AbstractWorker {
     public void run() {
         while (true) {
             try {
- 
                 Thread.sleep(time);
                 Object stem;
+                mg.setActivityWorker(lbl,false);
                 synchronized (Stem.class) {
                     WoodWorker.id++;
                     stem = new Stem(WoodWorker.id);
@@ -56,11 +56,13 @@ public class WoodWorker extends AbstractWorker {
                 Thread.sleep(time);
                 transport((Stem) stem);
                 System.out.println("Transported!" + time + stem);
+                mg.setActivityWorker(lbl,true);
                 mg.drawAnimation(lbl, mg.lblRaw);
             } catch (InterruptedException e) {
                 break;
             }
         }
     }
+    
 
 }

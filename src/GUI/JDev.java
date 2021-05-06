@@ -73,7 +73,7 @@ public class JDev extends JDialog implements IDialog {
 		lblNewLabel_1_1.setBounds(503, 294, 141, 21);
 		contentPanel.add(lblNewLabel_1_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Students of group PE-191");
+		JLabel lblNewLabel_2 = new JLabel("Students of group SE-191");
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setFont(new Font("Yu Gothic", Font.BOLD, 14));
 		lblNewLabel_2.setBounds(187, 52, 281, 14);
@@ -121,16 +121,16 @@ public class JDev extends JDialog implements IDialog {
 		lblNewLabel_3_3_1.setBounds(264, 171, 128, 14);
 		contentPanel.add(lblNewLabel_3_3_1);
 		
-		JLabel lblNewLabel_3_1_3 = new JLabel("Pinchuk Stanislav");
+		JLabel lblNewLabel_3_1_3 = new JLabel("stanislav.pinchuk@stu.cn.ua");
 		lblNewLabel_3_1_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3_1_3.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		lblNewLabel_3_1_3.setBounds(171, 198, 128, 14);
+		lblNewLabel_3_1_3.setFont(new Font("Yu Gothic", Font.BOLD, 12));
+		lblNewLabel_3_1_3.setBounds(171, 197, 169, 14);
 		contentPanel.add(lblNewLabel_3_1_3);
 		
 		JLabel lblNewLabel_3_1_4 = new JLabel("sezonchik@ukr.net");
 		lblNewLabel_3_1_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_3_1_4.setFont(new Font("Yu Gothic", Font.BOLD, 14));
-		lblNewLabel_3_1_4.setBounds(355, 199, 128, 14);
+		lblNewLabel_3_1_4.setBounds(355, 196, 128, 14);
 		contentPanel.add(lblNewLabel_3_1_4);
 		
 		JLabel lblNewLabel_3_3_1_1 = new JLabel("Number:");
@@ -162,7 +162,7 @@ public class JDev extends JDialog implements IDialog {
 		
 		contentPanel.add(labelSergey);
 		labelSergey.setIcon(new ImageIcon(JDev.class.getResource("/pngDialog/sergey.jpg")));
-		
+		labelStas.setIcon(new ImageIcon(JDev.class.getResource("/pngDialog/stas.jpg")));
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBackground(new Color(143, 188, 143));

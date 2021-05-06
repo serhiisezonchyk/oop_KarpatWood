@@ -12,12 +12,11 @@ public class Garage {
     JLabel lbl;
     mainGui mg;
 
-    public Garage(int capacity, JLabel lbl, mainGui mg) {
-        this.lbl = lbl;
+    public Garage(JLabel lblCar1,JLabel lblCar2, mainGui mg,int size1, int size2) {
         this.mg = mg;
         trucks = new CopyOnWriteArrayList<>();
-        for (int i = 0; i < capacity; i++)
-            trucks.add(new Truck((short)5, lbl, mg));
+        trucks.add(new Truck((short)size1, lblCar1, mg, mg.getSpinnerCar1()));
+        trucks.add(new Truck((short)size2, lblCar2, mg, mg.getSpinnerCar2()));
     }
 
 

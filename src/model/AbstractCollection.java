@@ -27,6 +27,7 @@ public abstract class AbstractCollection {
     }
 
     public synchronized AbstractWood popItem() {
+    	slider.setValue(raws.size());
         while (raws.isEmpty()) {
             try {
                 wait();

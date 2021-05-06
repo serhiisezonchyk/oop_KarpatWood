@@ -3,6 +3,8 @@ package model;
 import GUI.mainGui;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,12 +29,20 @@ public class RawCollection extends AbstractCollection {
 
 
     public synchronized void pushItem(IWooden stem) {
+        if(slider.getMaximum()*0.9 <= raws.size()){
+        	slider.setBackground(Color.RED);
+        }else if(slider.getMaximum()*0.5 <= raws.size()&&slider.getMaximum()*0.9 >= raws.size()) {
+        	slider.setBackground(Color.YELLOW);
+        }else 
+        	slider.setBackground(Color.GREEN);
+    	mg.rawbox_count(getSize());
         while (raws.size() == maxLength) {
             try {
                 wait();
             } catch (InterruptedException e) {
             }
         }
+        slider.setValue(raws.size());
         raws.add(stem);
         System.out.println(ready);
         while (ready.size() == 0){
@@ -43,6 +53,14 @@ public class RawCollection extends AbstractCollection {
             }
         }
         mg.drawAnimation(lbl,ready.get(0) == 0 ? mg.lblMachine1 : mg.lblMachine2);
+        mg.rawbox_count(getSize());
+        
+        if(slider.getMaximum()*0.9 <= raws.size()){
+        	slider.setBackground(Color.RED);
+        }else if(slider.getMaximum()*0.5 <= raws.size()&&slider.getMaximum()*0.9 >= raws.size()) {
+        	slider.setBackground(Color.YELLOW);
+        }else 
+        	slider.setBackground(Color.GREEN);
         slider.setValue(raws.size());
         notify();
     }
@@ -52,6 +70,11 @@ public class RawCollection extends AbstractCollection {
         return "RawCollection{" +
                 "raws=" + raws +
                 '}';
+    }
+    
+    public int getSize() {
+		return raws.size();
+    	
     }
 
 }

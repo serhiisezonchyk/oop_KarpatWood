@@ -7,12 +7,14 @@ import javax.swing.*;
 public class Workbench extends AbstractWorker{
     TimberCollection tc;
     int id;
+    int timeOfWork;
 
     public Workbench(int timeOfWork,RawCollection rc, TimberCollection tc, JLabel lbl, mainGui mg, int id) {
-        super(1000,rc, lbl, mg);
+        super(timeOfWork,rc, lbl, mg);
         this.tc = tc;
         System.out.println(this.tc);
         this.id = id;
+        this.timeOfWork = timeOfWork;
         rc.setReady(id);
     }
 
@@ -29,15 +31,16 @@ public class Workbench extends AbstractWorker{
         while (!Thread.interrupted()) {
             try {
                 rc.setReady(id);
-                Thread.sleep(time);
+                mg.setActivityMachine(lbl, false);
+                Thread.sleep(timeOfWork);
                 Stem poped = (Stem)rc.popItem();
                 System.out.println("Poped!" + poped);
-                Thread.sleep(time);
+//                Thread.sleep(timeOfWork);
                 Timber timber = poped.convertToTimber();
                 poped = null;
                 System.out.println("Timber produced = " + timber);
+                mg.setActivityMachine(lbl, true);
                 transport(timber);
-                //Thread.sleep(time);
                 mg.drawAnimation(lbl, mg.lblExportbox);
 
                 System.out.println("Transported!" + timber);
