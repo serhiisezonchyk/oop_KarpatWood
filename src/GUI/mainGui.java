@@ -175,7 +175,7 @@ public class mainGui {
 			new Thread(ww).start();
 		}
 	}
-
+	int id = 0;
 	public void machine_active(int size,JLabel machine,boolean flag) {
 		if(!flag) {
 			machine.setIcon(new ImageIcon(urlMachine));
@@ -185,7 +185,8 @@ public class mainGui {
 			if (tc == null)
 				tc = new TimberCollection((short)size, gr, lblExportbox, this,slider_1);
 			machine.setIcon(new ImageIcon(urlMachineActive));
-			wb = new Workbench(0,rc,tc, machine, this);
+			wb = new Workbench(0,rc,tc, machine, this,id);
+			id++;
 			new Thread(wb).start();
 		}
 	}
