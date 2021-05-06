@@ -7,6 +7,7 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
 import javax.imageio.ImageIO;
 import javax.print.DocFlavor.URL;
 import javax.swing.ImageIcon;
@@ -22,14 +23,19 @@ import javax.swing.RepaintManager;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
+import javax.swing.JMenuBar;
+import javax.swing.JToolBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 
 
 
 public class mainGui {
 
 	private JFrame frame;
-
-
+	private JTask getTask = new JTask();
+	private JDev getDevs = new JDev();
+	
 	private Image img = null;
 	{
 		img = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/png/fon.png"));
@@ -242,6 +248,7 @@ public class mainGui {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					mainGui window = new mainGui();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -493,6 +500,35 @@ public class mainGui {
 		});
 		btnStop.setBounds(1740, 967, 113, 43);
 		panel.add(btnStop);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setForeground(new Color(0, 0, 0));
+		menuBar.setBounds(0, 0, 1882, 21);
+		panel.add(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Menu");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Task");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IDialog dlg = (IDialog) getTask;
+				dlg.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JSeparator separator = new JSeparator();
+		mnNewMenu.add(separator);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Developers");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IDialog dlg = (IDialog) getDevs;
+				dlg.setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem);
 
 
 		frame.setBounds(20, 10, 1888, 1060);
