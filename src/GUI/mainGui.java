@@ -146,7 +146,7 @@ public class mainGui {
 					e.printStackTrace();
 				}
 
-				panel.repaint(sx, sy, 100, 200);
+				panel.repaint(sx, sy, 40, 40);
 				// if you'll draw a rectangle, please fix the size of it
 				//g2d.fillRect(sx,sy, 236,58);
 				//g2d.fillRect(sx,sy, 40,40);

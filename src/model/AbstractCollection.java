@@ -20,18 +20,7 @@ public abstract class AbstractCollection {
         this.slider = slider;
     }
 
-    public synchronized void pushItem(IWooden stem) {
-        while (raws.size() == maxLength) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-            }
-        }
-        raws.add(stem);
-        mg.drawAnimation(lbl,mg.lblMachine1);
-        slider.setValue(raws.size());
-        notify();
-    }
+    public abstract void pushItem(IWooden stem);
 
     public int getLength() {
         return raws.size();
