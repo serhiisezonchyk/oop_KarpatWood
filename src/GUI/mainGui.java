@@ -133,13 +133,13 @@ public class mainGui {
 		Graphics2D g2d = (Graphics2D) frame.getGraphics();
 		(new Thread(() -> {
 			for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
-				//g2d.setColor(Color.CYAN);
+				g2d.setColor(Color.CYAN);
 				// you can draw a rectangle
-				//g2d.fillRect(sx,sy, 40,40);
+				g2d.fillRect(sx,sy, 40,40);
 				// or try to draw an image
-				ImageIcon im= new ImageIcon(getImage());
+				//ImageIcon im= new ImageIcon(getImage());
 
-				g2d.drawImage(getImage(), sx, sy, null);
+				//g2d.drawImage(getImage(), sx, sy, null);
 				try {
 					Thread.sleep(1000/120);
 				} catch (InterruptedException e) {

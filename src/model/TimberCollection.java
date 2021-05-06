@@ -13,7 +13,7 @@ public class TimberCollection extends AbstractCollection{
 
     public synchronized void pushItem(IWooden stem) {
         System.out.println("Filling the garage..." + stem);
-        mg.drawAnimation(lbl, mg.lblCar2);
+        mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1);
         garage.fillGarage(stem);
     }
 
