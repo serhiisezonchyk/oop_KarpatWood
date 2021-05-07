@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import javax.imageio.ImageIO;
-import javax.print.DocFlavor.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,18 +16,15 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
-import javax.swing.RepaintManager;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
-import javax.swing.border.BevelBorder;
 
 
 
@@ -43,12 +39,12 @@ public class mainGui {
 		img = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/png/fon.png"));
 	}
 	private JPanel panel = new JPanel() {
-
 		public void paintComponent(Graphics g)  {
 			super.paintComponent(g);
 			g.drawImage(img, 0, 0, this);
 		}
 	};
+
 	public JLabel lblMachine1;
 	public JLabel lblCar2;
 	public JLabel lblperson1;
@@ -69,38 +65,13 @@ public class mainGui {
 	public boolean machine1_flag;
 	public boolean machine2_flag;
 
-	private int rawCount = 0; 
-
-	public int getRawCount() {
-		return rawCount;
-	}
-
-	public void setRawCount(int rawCount) {
-		this.rawCount = rawCount;
-	}
 
 
-	java.net.URL urlRawboxEmpty = mainGui.class.getResource("/png/rawbox.png");
-	java.net.URL urlRawbox = mainGui.class.getResource("/png/sklad.png");
-	java.net.URL urlExportbox = mainGui.class.getResource("/png/exportbox.png");
-
-	java.net.URL urlRiver = mainGui.class.getResource("/gifs/river.gif");
-
-	java.net.URL urlSound = mainGui.class.getResource("/music/mario.wav");
-	Sound sound =  new Sound(urlSound);
-	Thread t1;
-
-	Thread tm1;
-	Thread tm2;
 	private JLabel lblRiver;
 	private JLabel lblRaw1;
 	private JLabel tree1;
-
-	RawCollection rc;
 	private WoodWorker ww;
 	private Workbench wb;
-	TimberCollection tc;
-	Garage gr;
 	private JSpinner spinner_3;
 	private JSpinner spinner_4;
 	private JLabel lblTimeOfWork_1;
@@ -116,68 +87,60 @@ public class mainGui {
 	private JSpinner spinner_1;
 	private JSpinner spinner_2;
 	private JButton btnStart;
-//		public void drawAnimation(JLabel src, JLabel dst){
-//			int x = src.getX();
-//			int y = src.getY();
-//			int x2 = dst.getX();
-//			int y2 = dst.getY();
-//			Graphics2D g2d = (Graphics2D) frame.getGraphics();
-//			(new Thread(() -> {
-//				for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
-//					g2d.setColor(Color.CYAN);
-//					// you can draw a rectangle
-//					g2d.fillRect(sx,sy, 40,40);
-//					// or try to draw an image
-//					//ImageIcon im= new ImageIcon(getImage());
-//	
-//					//g2d.drawImage(getImage(), sx, sy, null);
-//					try {
-//						Thread.sleep(1000/120);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//	
-//					panel.repaint(sx, sy, 40, 40);
-//					// if you'll draw a rectangle, please fix the size of it
-//					//g2d.fillRect(sx,sy, 236,58);
-//					//g2d.fillRect(sx,sy, 40,40);
-//				}
-//			})).start();
-//		}
+	private JSpinner spinner_7;
+	private JSpinner spinner_7_1;
+	private JSpinner spinner_4_1_1;
+	private JSpinner spinner_4_1;
 
-	public void drawAnimation(JLabel src, JLabel dst){
-		int x = src.getX();
-		int y = src.getY();
-		int x2 = dst.getX();
-		int y2 = dst.getY();
+	RawCollection rc;
+	TimberCollection tc;
+	Garage gr;
+	int id = 0;
+
+	java.net.URL urlRawboxEmpty = mainGui.class.getResource("/png/rawbox.png");
+	java.net.URL urlRawbox = mainGui.class.getResource("/png/sklad.png");
+	java.net.URL urlExportbox = mainGui.class.getResource("/png/exportbox.png");
+	java.net.URL urlRiver = mainGui.class.getResource("/gifs/river.gif");
+	java.net.URL urlSound = mainGui.class.getResource("/music/mario.wav");
+	Sound sound =  new Sound(urlSound);
+	Thread t1;
+
+
+
+	public synchronized void  drawAnimation(JLabel src, JLabel dst, boolean ready){
+
+		int x = (src.getX()+src.getWidth()/2);
+		int y = (src.getY()+src.getHeight()/2);
+		int x2 = (dst.getX()+dst.getWidth()/2);
+		int y2 = (dst.getY()+dst.getHeight()/2);
+		int lenX= (x2-x);
+		int lenY = (y2-y);
+
+		int len = (int)Math.round(Math.sqrt((double)(lenX * lenX + lenY * lenY)));
+		int n = 120;
+
 		Graphics2D g2d = (Graphics2D) frame.getGraphics();
-		(new Thread(() -> {
-			for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
-				g2d.setColor(Color.CYAN);
-				// you can draw a rectangle
-				g2d.fillRect(sx,sy, 40,40);
-				// or try to draw an image
-				//ImageIcon im= new ImageIcon(getImage());
+		Image img = getImage(ready);
+		int dx = lenX/n;
+		int dy= lenY/n;
 
-				//g2d.drawImage(getImage(), sx, sy, null);
+		(new Thread(() -> {
+			for (int sx = x, sy = y, i = 0; i < n; sx += dx, sy += dy, i++) {
+				g2d.drawImage(img, sx-120, sy, null);
+
 				try {
 					Thread.sleep(1000/120);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-
-				panel.repaint(sx, sy, 40, 40);
-				// if you'll draw a rectangle, please fix the size of it
-				//g2d.fillRect(sx,sy, 236,58);
-				//g2d.fillRect(sx,sy, 40,40);
+				panel.updateUI();
 			}
 		})).start();
 	}
-
 	private Image getImage(boolean raw){
 		Image img = null;
 		try {
-			if(raw) {
+			if(!raw) {
 				java.net.URL url = WoodWorker.class.getResource("../png/raw.png");
 				img = ImageIO.read(url);
 			}else {
@@ -188,6 +151,40 @@ public class mainGui {
 		}
 		return img;
 	}
+
+	/*
+	 * Без фотки
+	 */
+
+	//	public void drawAnimation(JLabel src, JLabel dst){
+	//	int x = src.getX();
+	//	int y = src.getY();
+	//	int x2 = dst.getX();
+	//	int y2 = dst.getY();
+	//	Graphics2D g2d = (Graphics2D) frame.getGraphics();
+	//	Image image = getImage(true);
+	//	(new Thread(() -> {
+	//		for (int sx = x, sy = y, i = 0; i < 120; sx += (x2-x)/120, sy += (y2-y)/120, i++) {
+	//			g2d.setColor(Color.CYAN);
+	//			// you can draw a rectangle
+	//			g2d.fillRect(sx,sy, 40,40);
+	//			// or try to draw an image
+	//			
+	//
+	//			g2d.drawImage(image, sx, sy, null);
+	//			try {
+	//				Thread.sleep(1000/120);
+	//			} catch (InterruptedException e) {
+	//				e.printStackTrace();
+	//			}
+	//
+	//			panel.updateUI();
+	//			// if you'll draw a rectangle, please fix the size of it
+	//			//g2d.fillRect(sx,sy, 236,58);
+	//			//g2d.fillRect(sx,sy, 40,40);
+	//		}
+	//	})).start();
+	//}
 
 	//	private Image getImage(){
 	//		Image img = null;
@@ -239,12 +236,8 @@ public class mainGui {
 			new Thread(ww).start();;
 		}
 	}
-	
-	int id = 0;
-	private JSpinner spinner_7;
-	private JSpinner spinner_7_1;
-	private JSpinner spinner_4_1_1;
-	private JSpinner spinner_4_1;
+
+
 
 	public void setActivityMachine(JLabel lbl,boolean pause) {
 		if(lbl == lblMachine1) {
@@ -490,7 +483,7 @@ public class mainGui {
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 		slider.setMinorTickSpacing(1);
-		
+
 		slider.setOrientation(SwingConstants.VERTICAL);
 		slider.setBounds(1100, 838, 62, 160);
 		panel.add(slider);
@@ -556,7 +549,7 @@ public class mainGui {
 		lblTimeOfWork_5.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblTimeOfWork_5.setBounds(1331, 925, 153, 14);
 		panel.add(lblTimeOfWork_5);
-		
+
 
 		/*Кнопочка старт
 		 */
@@ -572,7 +565,7 @@ public class mainGui {
 				spinner_4.setEnabled(false);
 				spinner_5.setEnabled(false);
 				spinner_6.setEnabled(false);
-				
+
 
 				Thread t1 = new Thread(new Runnable() {
 					@Override
@@ -628,19 +621,19 @@ public class mainGui {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
-		
+
 		spinner_7 = new JSpinner();
 		spinner_7.setBounds(1100, 772, 62, 20);
 		panel.add(spinner_7);
-		
+
 		spinner_7_1 = new JSpinner();
 		spinner_7_1.setBounds(1177, 772, 62, 20);
 		panel.add(spinner_7_1);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Size");
 		lblNewLabel_3.setBounds(1100, 748, 46, 14);
 		panel.add(lblNewLabel_3);
-		
+
 		JLabel lblNewLabel_3_1 = new JLabel("Size");
 		lblNewLabel_3_1.setBounds(1177, 748, 46, 14);
 		panel.add(lblNewLabel_3_1);
@@ -657,7 +650,7 @@ public class mainGui {
 			spinner_6.setValue(8);
 			spinner_7.setValue(10);
 			spinner_7_1.setValue(10);
-			
+
 			tree_active(tree1, false);
 			tree_active(tree2, false);
 			tree_active(tree3, false);
@@ -718,8 +711,6 @@ public class mainGui {
 			public void run() {
 				try {
 					t1.join();
-					t2.join();
-					t3.join();
 					//Вообще должно здесь работать
 					//btnStart.setEnabled(true); 
 				} catch (InterruptedException e) {
@@ -729,11 +720,11 @@ public class mainGui {
 			}
 		}.start();
 	}
-	
+
 	public JSpinner getSpinnerCar1() {
 		return spinner_4_1;
 	}
-	
+
 	public JSpinner getSpinnerCar2() {
 		return spinner_4_1_1;
 	}

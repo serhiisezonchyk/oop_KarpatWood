@@ -2,6 +2,8 @@ package model;
 
 import GUI.mainGui;
 
+import java.awt.Color;
+
 import javax.swing.*;
 
 public class TimberCollection extends AbstractCollection{
@@ -12,9 +14,15 @@ public class TimberCollection extends AbstractCollection{
     }
 
     public synchronized void pushItem(IWooden stem) {
+    	slider.setValue(raws.size());
+    	raws.add(stem);
+    	slider.setValue(raws.size());
         System.out.println("Filling the garage..." + stem);
-        mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1);
+        mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);
+        
         garage.fillGarage(stem);
+        slider.setValue(raws.size());
+
     }
 
     @Override
@@ -23,4 +31,5 @@ public class TimberCollection extends AbstractCollection{
                 " raws=" + raws +
                 '}';
     }
+    
 }

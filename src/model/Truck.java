@@ -41,6 +41,7 @@ public class Truck extends AbstractCollection{
         raws.add(stem);
         spinner.setValue(raws.size());
     }
+    
 
     @Override
     public String toString() {

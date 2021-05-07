@@ -1,7 +1,9 @@
 package model;
 
-public class Stem extends AbstractWood {
+import java.awt.Component;
 
+
+public class Stem extends AbstractWood  {
     public Stem(int id) {
         super(id);
     }
@@ -17,5 +19,7 @@ public class Stem extends AbstractWood {
                 "id=" + id +
                 '}';
     }
+
+
 
 }

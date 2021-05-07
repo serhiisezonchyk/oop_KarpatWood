@@ -41,8 +41,7 @@ public class Workbench extends AbstractWorker{
                 System.out.println("Timber produced = " + timber);
                 mg.setActivityMachine(lbl, true);
                 transport(timber);
-                mg.drawAnimation(lbl, mg.lblExportbox);
-
+                mg.drawAnimation(lbl, mg.lblExportbox,true);
                 System.out.println("Transported!" + timber);
                 rc.setUnReady(id);
 

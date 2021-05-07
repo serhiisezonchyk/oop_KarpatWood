@@ -3,7 +3,6 @@ package model;
 public class AbstractWood implements IWooden {
     protected int id = 0;
     protected boolean isTransported = false;
-
     public AbstractWood(int id) {
         this.id = id;
     }
@@ -18,4 +17,6 @@ public class AbstractWood implements IWooden {
         isTransported = true;
         return true;
     }
+
+
 }
