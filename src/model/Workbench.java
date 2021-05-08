@@ -30,20 +30,21 @@ public class Workbench extends AbstractWorker{
     public synchronized void run() {
         while (!Thread.interrupted()) {
             try {
+            	mg.setActivityMachine(lbl, true);
                 rc.setReady(id);
-                mg.setActivityMachine(lbl, false);
-                Thread.sleep(timeOfWork);
                 Stem poped = (Stem)rc.popItem();
                 System.out.println("Poped!" + poped);
-//                Thread.sleep(timeOfWork);
+ 
                 Timber timber = poped.convertToTimber();
+              	mg.setActivityMachine(lbl, false);
+                Thread.sleep(timeOfWork);
                 poped = null;
                 System.out.println("Timber produced = " + timber);
-                mg.setActivityMachine(lbl, true);
                 transport(timber);
                 mg.drawAnimation(lbl, mg.lblExportbox,true);
                 System.out.println("Transported!" + timber);
                 rc.setUnReady(id);
+                
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

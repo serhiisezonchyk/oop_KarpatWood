@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RawCollection extends AbstractCollection {
 
@@ -30,15 +29,7 @@ public class RawCollection extends AbstractCollection {
 
 	public synchronized void pushItem(IWooden stem) {
 
-		if(slider.getMaximum()*0.9 <= raws.size()){
-			slider.setBackground(Color.RED);
-		}else if(slider.getMaximum()*0.5 <= raws.size()&&slider.getMaximum()*0.9 >= raws.size()) {
-			slider.setBackground(Color.YELLOW);
-		}else 
-			slider.setBackground(Color.GREEN);
-
-		mg.rawbox_count(getSize());
-
+		setSliderValue();
 		while (raws.size() == maxLength) {
 			try {
 				wait();
@@ -59,13 +50,8 @@ public class RawCollection extends AbstractCollection {
 		mg.drawAnimation(lbl,ready.get(0) == 0 ? mg.lblMachine1 : mg.lblMachine2,false);
 		mg.rawbox_count(getSize());
 
-		if(slider.getMaximum()*0.9 <= raws.size()){
-			slider.setBackground(Color.RED);
-		}else if(slider.getMaximum()*0.5 <= raws.size()&&slider.getMaximum()*0.9 >= raws.size()) {
-			slider.setBackground(Color.YELLOW);
-		}else 
-			slider.setBackground(Color.GREEN);
-		slider.setValue(raws.size());
+		setSliderValue();
+		
 		notify();
 	}
 
@@ -76,9 +62,5 @@ public class RawCollection extends AbstractCollection {
 				'}';
 	}
 
-	public int getSize() {
-		return raws.size();
-
-	}
 
 }

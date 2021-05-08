@@ -3,6 +3,8 @@ package model;
 import GUI.mainGui;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,7 +23,7 @@ public abstract class AbstractCollection {
     }
 
     public abstract void pushItem(IWooden stem);
-
+    
     public int getLength() {
         return raws.size();
     }
@@ -36,8 +38,24 @@ public abstract class AbstractCollection {
         }
         AbstractWood item = (AbstractWood)raws.get(raws.size() - 1);
         raws.remove(raws.size() - 1);
+        setSliderValue();
         slider.setValue(raws.size());
         notify();
         return item;
     }
+    
+    public void setSliderValue() {
+		if(slider.getMaximum()*0.9 <= raws.size()){
+			slider.setBackground(Color.RED);
+		}else if(slider.getMaximum()*0.5 <= raws.size()&&slider.getMaximum()*0.9 >= raws.size()) {
+			slider.setBackground(Color.YELLOW);
+		}else 
+			slider.setBackground(Color.GREEN);
+
+    }
+    
+	public int getSize() {
+		return raws.size();
+	}
+
 }

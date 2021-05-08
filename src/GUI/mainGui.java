@@ -91,7 +91,8 @@ public class mainGui {
 	private JSpinner spinner_7_1;
 	private JSpinner spinner_4_1_1;
 	private JSpinner spinner_4_1;
-
+	private boolean status ;
+	
 	RawCollection rc;
 	TimberCollection tc;
 	Garage gr;
@@ -104,10 +105,11 @@ public class mainGui {
 	java.net.URL urlSound = mainGui.class.getResource("/music/mario.wav");
 	Sound sound =  new Sound(urlSound);
 	Thread t1;
+	Thread tPersons;
+	Thread tMachine;
 
 
-
-	public synchronized void  drawAnimation(JLabel src, JLabel dst, boolean ready){
+	public void drawAnimation(JLabel src, JLabel dst, boolean ready){
 
 		int x = (src.getX()+src.getWidth()/2);
 		int y = (src.getY()+src.getHeight()/2);
@@ -233,7 +235,8 @@ public class mainGui {
 				rc = new RawCollection((short)(int)spinner_7.getValue(), lblRaw, this,slider);
 			person.setIcon(new ImageIcon(mainGui.class.getResource("/gifs/person.gif")));
 			ww = new WoodWorker(timeOfWork,rc, person, this);
-			new Thread(ww).start();;
+			tPersons  = new Thread(ww);
+			tPersons.start();
 		}
 	}
 
@@ -262,10 +265,11 @@ public class mainGui {
 				gr = new Garage(lblCar1, lblCar2,this,(int)spinner_5.getValue(),(int)spinner_6.getValue());
 			if (tc == null)
 				tc = new TimberCollection((short)(int)spinner_7_1.getValue(), gr, lblExportbox, this,slider_1);
-			machine.setIcon(new ImageIcon(mainGui.class.getResource("/gifs/Machine1.gif")));
+//			machine.setIcon(new ImageIcon(mainGui.class.getResource("/gifs/Machine1.gif")));
 			wb = new Workbench(timeOfWork,rc,tc, machine, this,id);
 			id++;
-			new Thread(wb).start();
+			tMachine = new Thread(wb);
+			tMachine.start();
 		}
 	}
 
@@ -555,9 +559,10 @@ public class mainGui {
 		 */
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent arg0) {
+				status = true;
 				btnStart.setEnabled(false);
-
 				spinner.setEnabled(false);
 				spinner_1.setEnabled(false);
 				spinner_2.setEnabled(false);
@@ -585,8 +590,22 @@ public class mainGui {
 		btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				status = false;
+				btnStart.setEnabled(true);
+				spinner.setEnabled(true);
+				spinner_1.setEnabled(true);
+				spinner_2.setEnabled(true);
+				spinner_3.setEnabled(true);
+				spinner_4.setEnabled(true);
+				spinner_5.setEnabled(false);
+				spinner_6.setEnabled(false);
+				spinner_7.setEnabled(false);
+				spinner_7_1.setEnabled(false);
+				spinner_4_1.setEnabled(false);
+				spinner_4_1_1.setEnabled(false);
+				
+				
 				sound.stop();
-				sound.close();
 				onEndOfPlay();
 			}
 		});
@@ -695,24 +714,12 @@ public class mainGui {
 	 * (По идее нужно запускать каждый елемент в отдельном)
 	 */
 	private void onEndOfPlay() {
-		btnStart.setEnabled(true);
-		spinner.setEnabled(true);
-		spinner_1.setEnabled(true);
-		spinner_2.setEnabled(true);
-		spinner_3.setEnabled(true);
-		spinner_4.setEnabled(true);
-		spinner_5.setEnabled(false);
-		spinner_6.setEnabled(false);
-		spinner_7.setEnabled(false);
-		spinner_7_1.setEnabled(false);
-		spinner_4_1.setEnabled(false);
-		spinner_4_1_1.setEnabled(false);
 		new Thread() {
 			public void run() {
 				try {
+					tMachine.join();
+					tPersons.join();
 					t1.join();
-					//Вообще должно здесь работать
-					//btnStart.setEnabled(true); 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -720,7 +727,11 @@ public class mainGui {
 			}
 		}.start();
 	}
+	
 
+	public boolean isPlaying() {
+		return status;
+	}
 	public JSpinner getSpinnerCar1() {
 		return spinner_4_1;
 	}
@@ -728,6 +739,9 @@ public class mainGui {
 	public JSpinner getSpinnerCar2() {
 		return spinner_4_1_1;
 	}
-
+	
+	public int getMaxRaw() {
+		return (int)spinner_7.getValue();
+	}
 }
 

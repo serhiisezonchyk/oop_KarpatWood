@@ -16,7 +16,6 @@ import java.util.Random;
 public class WoodWorker extends AbstractWorker {
     static int id = 0;
     private Graphics2D g2d;
-
     public WoodWorker(int time,RawCollection rc, JLabel lbl, mainGui mg) {
         super(time,rc, lbl, mg);
     }
@@ -43,7 +42,7 @@ public class WoodWorker extends AbstractWorker {
 
     @Override
     public void run() {
-        while (true) {
+        while (mg.isPlaying()||rc.getLength()>=mg.getMaxRaw()) {
             try {
                 Thread.sleep(time);
                 Object stem;
