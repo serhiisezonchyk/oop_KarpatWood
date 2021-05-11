@@ -39,6 +39,22 @@ public class RawCollection extends AbstractCollection {
 
 		slider.setValue(raws.size());
 		raws.add(stem);
+		mg.rawbox_count(getSize());
+
+		setSliderValue();
+		
+		notify();
+	}
+
+
+	public synchronized AbstractWood popItem() {
+		slider.setValue(raws.size());
+		while (raws.isEmpty()) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+			}
+		}
 		System.out.println(ready);
 		while (ready.size() == 0){
 			try {
@@ -47,12 +63,22 @@ public class RawCollection extends AbstractCollection {
 				e.printStackTrace();
 			}
 		}
-		mg.drawAnimation(lbl,ready.get(0) == 0 ? mg.lblMachine1 : mg.lblMachine2,false);
-		mg.rawbox_count(getSize());
 
+		Thread th = new Thread(() -> {mg.drawAnimation(lbl,ready.get(0) == 1 ? mg.lblMachine1 : mg.lblMachine2,false);});
+		ready.remove(0);
+		th.start();
+		try {
+			th.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		AbstractWood item = (AbstractWood)raws.get(raws.size() - 1);
+		raws.remove(raws.size() - 1);
 		setSliderValue();
-		
+		slider.setValue(raws.size());
 		notify();
+		return item;
 	}
 
 	@Override

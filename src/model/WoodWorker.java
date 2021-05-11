@@ -52,11 +52,11 @@ public class WoodWorker extends AbstractWorker {
                     stem = new Stem(WoodWorker.id);
                 }
                 System.out.println("Produced!" + time + stem);
+                mg.drawAnimation(lbl, mg.lblRaw, false);
                 Thread.sleep(time);
                 transport((Stem) stem);
                 System.out.println("Transported!" + time + stem);
                 mg.setActivityWorker(lbl,true);
-                mg.drawAnimation(lbl, mg.lblRaw, false);
             } catch (InterruptedException e) {
                 break;
             }

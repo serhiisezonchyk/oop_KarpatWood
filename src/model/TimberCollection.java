@@ -14,11 +14,19 @@ public class TimberCollection extends AbstractCollection{
     }
 
     public synchronized void pushItem(IWooden stem) {
+        while (raws.size() == maxLength) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        raws.add(stem);
     	setSliderValue();
     	slider.setValue(raws.size());
         System.out.println("Filling the garage..." + stem);
-        mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);
-        
+        Thread th = new Thread(() -> {mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);});
+        th.start();
+        popItem();
         garage.fillGarage(stem);
 
     }

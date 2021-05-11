@@ -33,15 +33,22 @@ public class Workbench extends AbstractWorker{
             	mg.setActivityMachine(lbl, true);
                 rc.setReady(id);
                 Stem poped = (Stem)rc.popItem();
+                /*try {
+                    new Thread(() -> {mg.drawAnimation(mg.lblRaw,lbl, true);}).join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
                 System.out.println("Poped!" + poped);
  
                 Timber timber = poped.convertToTimber();
-              	mg.setActivityMachine(lbl, false);
                 Thread.sleep(timeOfWork);
+                mg.setActivityMachine(lbl, false);
                 poped = null;
                 System.out.println("Timber produced = " + timber);
+                Thread th = new Thread(()->{mg.drawAnimation(lbl, mg.lblExportbox,true);});
+                th.start();
+                this.wait(1000);
                 transport(timber);
-                mg.drawAnimation(lbl, mg.lblExportbox,true);
                 System.out.println("Transported!" + timber);
                 rc.setUnReady(id);
                 

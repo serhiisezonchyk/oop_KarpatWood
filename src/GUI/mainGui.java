@@ -109,7 +109,7 @@ public class mainGui {
 	Thread tMachine;
 
 
-	public void drawAnimation(JLabel src, JLabel dst, boolean ready){
+	public synchronized void drawAnimation(JLabel src, JLabel dst, boolean ready){
 
 		int x = (src.getX()+src.getWidth()/2);
 		int y = (src.getY()+src.getHeight()/2);
@@ -131,7 +131,7 @@ public class mainGui {
 				g2d.drawImage(img, sx-120, sy, null);
 
 				try {
-					Thread.sleep(1000/120);
+					Thread.sleep(1000/60);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
