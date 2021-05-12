@@ -29,7 +29,6 @@ public class RawCollection extends AbstractCollection {
 
 	public synchronized void pushItem(IWooden stem) {
 
-		setSliderValue();
 		while (raws.size() == maxLength) {
 			try {
 				wait();
@@ -40,7 +39,6 @@ public class RawCollection extends AbstractCollection {
 		slider.setValue(raws.size());
 		raws.add(stem);
 		mg.rawbox_count(getSize());
-
 		setSliderValue();
 		
 		notify();
@@ -48,7 +46,6 @@ public class RawCollection extends AbstractCollection {
 
 
 	public synchronized AbstractWood popItem() {
-		slider.setValue(raws.size());
 		while (raws.isEmpty()) {
 			try {
 				wait();
@@ -64,8 +61,7 @@ public class RawCollection extends AbstractCollection {
 			}
 		}
 
-		Thread th = new Thread(() -> {mg.drawAnimation(lbl,ready.get(0) == 1 ? mg.lblMachine1 : mg.lblMachine2,false);});
-		ready.remove(0);
+		Thread th = new Thread(() -> {mg.drawAnimation(lbl,ready.get(0) == 1 ? mg.lblMachine1 : mg.lblMachine2,false);ready.remove(0);});
 		th.start();
 		try {
 			th.join();
@@ -76,7 +72,6 @@ public class RawCollection extends AbstractCollection {
 		AbstractWood item = (AbstractWood)raws.get(raws.size() - 1);
 		raws.remove(raws.size() - 1);
 		setSliderValue();
-		slider.setValue(raws.size());
 		notify();
 		return item;
 	}

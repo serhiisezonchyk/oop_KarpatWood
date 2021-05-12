@@ -21,12 +21,13 @@ public class TimberCollection extends AbstractCollection{
             }
         }
         raws.add(stem);
+        toString();
     	setSliderValue();
-    	slider.setValue(raws.size());
         System.out.println("Filling the garage..." + stem);
         Thread th = new Thread(() -> {mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);});
         th.start();
         popItem();
+        toString();
         garage.fillGarage(stem);
 
     }

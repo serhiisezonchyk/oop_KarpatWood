@@ -29,7 +29,6 @@ public abstract class AbstractCollection {
     }
 
     public synchronized AbstractWood popItem() {
-    	slider.setValue(raws.size());
         while (raws.isEmpty()) {
             try {
                 wait();
@@ -39,7 +38,6 @@ public abstract class AbstractCollection {
         AbstractWood item = (AbstractWood)raws.get(raws.size() - 1);
         raws.remove(raws.size() - 1);
         setSliderValue();
-        slider.setValue(raws.size());
         notify();
         return item;
     }
@@ -51,7 +49,7 @@ public abstract class AbstractCollection {
 			slider.setBackground(Color.YELLOW);
 		}else 
 			slider.setBackground(Color.GREEN);
-
+		slider.setValue(raws.size());
     }
     
 	public int getSize() {

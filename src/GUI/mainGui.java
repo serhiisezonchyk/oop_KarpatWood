@@ -135,7 +135,7 @@ public class mainGui {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				panel.updateUI();
+//				panel.updateUI();
 			}
 		})).start();
 	}
@@ -691,6 +691,7 @@ public class mainGui {
 	 * (Отэто все нужно в потоки позасовывать:()
 	 */
 	protected void doRun() {
+		sound.setVolume(0);
 		sound.play();
 		slider.setMaximum((int) spinner_7.getValue());
 		slider_1.setMaximum((int) spinner_7_1.getValue());

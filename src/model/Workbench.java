@@ -21,7 +21,7 @@ public class Workbench extends AbstractWorker{
     @Override
     protected void transport(AbstractWood aw) {
         System.out.println(tc);
-
+        
         aw.makeTransported();
         tc.pushItem(aw);
     }
@@ -47,7 +47,9 @@ public class Workbench extends AbstractWorker{
                 System.out.println("Timber produced = " + timber);
                 Thread th = new Thread(()->{mg.drawAnimation(lbl, mg.lblExportbox,true);});
                 th.start();
-                this.wait(1000);
+                
+                this.wait(2000);
+                
                 transport(timber);
                 System.out.println("Transported!" + timber);
                 rc.setUnReady(id);
