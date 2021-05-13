@@ -44,6 +44,8 @@ public class WoodWorker extends AbstractWorker {
     public void run() {
         while (mg.isPlaying()||rc.getLength()>=mg.getMaxRaw()) {
             try {
+            	Random rnd = new Random();
+            	long time = this.time + (long)(rnd.nextInt((int)this.time));
                 Thread.sleep(time);
                 Object stem;
                 mg.setActivityWorker(lbl,false);

@@ -17,11 +17,11 @@ public class Truck extends AbstractCollection{
         this.spinner = spinner;
     }
 
-    private synchronized void unLoad(){
+    private  void unLoad(){
     	mg.setCarActivity(lbl, 2);
         System.out.println("Truck has gone!" + this);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(maxLength *5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -29,7 +29,7 @@ public class Truck extends AbstractCollection{
         mg.setCarActivity(lbl, 1);
         System.out.println("Truck has returned!" + this);
         isReady = true;
-        notify();
+//        notify();
     }
 
     public synchronized void pushItem(IWooden stem) {
@@ -41,7 +41,12 @@ public class Truck extends AbstractCollection{
         raws.add(stem);
         spinner.setValue(raws.size());
     }
-    
+    public void checkMax() {
+        if (raws.size() == maxLength) {
+            isReady = false;
+            unLoad();
+        }
+    }
 
     @Override
     public String toString() {

@@ -20,7 +20,7 @@ public class Garage {
     }
 
 
-    public int getReadyIndex(){
+    public  int getReadyIndex(){
         // load already loaded Truck
         if (trucks.get(priorityTruck).isReady()) {
             return priorityTruck;
@@ -35,14 +35,27 @@ public class Garage {
     }
 
     public synchronized void fillGarage(IWooden as){
+    	
+    	
         while (getReadyIndex() == -1){
             try {
-                wait(1000);
+                wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        (new Thread(() -> {trucks.get(getReadyIndex()).pushItem(as);})).start();
+        //Проверка перед отправкой так сказатб
+        new Thread (()->{trucks.get(getReadyIndex()).checkMax();}).start();
+        
+    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        (new Thread(() -> {
+        	trucks.get(getReadyIndex()).pushItem(as);
+        	})).start();
         System.out.println("Ready index is " + getReadyIndex());
         notify();
     }
