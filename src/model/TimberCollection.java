@@ -27,13 +27,13 @@ public class TimberCollection extends AbstractCollection{
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		Thread th = new Thread(() -> {
-			mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);popItem();});
-		th.start();
 		
 		toString();
 		
 		garage.fillGarage(stem);
+		Thread th = new Thread(() -> {
+			mg.drawAnimation(lbl, garage.getReadyIndex() == 1 ? mg.lblCar2 : mg.lblCar1,true);popItem();});
+		th.start();
 		notify();
 	}
 

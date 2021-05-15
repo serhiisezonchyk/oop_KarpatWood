@@ -180,7 +180,9 @@ public class mainGui {
 
 				//				g2d.clearRect(sx-(x2-x)/120, sy-(y2-y)/120, 40, 40);
 				// if you'll draw a rectangle, please fix the size of it
+				g2d.setColor(Color.WHITE);
 				g2d.fillRect(sx,sy, 40,40);
+				//panel.updateUI();
 			}
 		})).start();
 	}

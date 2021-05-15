@@ -39,13 +39,13 @@ public class Garage {
     	
         while (getReadyIndex() == -1){
             try {
-                wait();
+                wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         //Проверка перед отправкой так сказатб
-        new Thread (()->{trucks.get(getReadyIndex()).checkMax();}).start();
+        //new Thread (()->{trucks.get(getReadyIndex()).checkMax();}).start();
         
     	try {
 			Thread.sleep(1000);

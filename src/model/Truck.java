@@ -21,7 +21,7 @@ public class Truck extends AbstractCollection{
     	mg.setCarActivity(lbl, 2);
         System.out.println("Truck has gone!" + this);
         try {
-            Thread.sleep(maxLength *5000);
+            Thread.sleep(maxLength *2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -34,18 +34,15 @@ public class Truck extends AbstractCollection{
 
     public synchronized void pushItem(IWooden stem) {
     	spinner.setValue(raws.size());
-        if (raws.size() == maxLength) {
+        if (raws.size() == maxLength-1) {
+            raws.add(stem);
+            spinner.setValue(raws.size());
             isReady = false;
             unLoad();
+            return;
         }
         raws.add(stem);
         spinner.setValue(raws.size());
-    }
-    public void checkMax() {
-        if (raws.size() == maxLength) {
-            isReady = false;
-            unLoad();
-        }
     }
 
     @Override
