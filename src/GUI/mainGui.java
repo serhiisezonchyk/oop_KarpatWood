@@ -72,8 +72,6 @@ public class mainGui {
 	private JLabel lblRiver;
 	private JLabel lblRaw1;
 	private JLabel tree1;
-	private WoodWorker ww;
-	private Workbench wb;
 	private JSpinner spinner_3;
 	private JSpinner spinner_4;
 	private JLabel lblTimeOfWork_1;
@@ -110,6 +108,9 @@ public class mainGui {
 	Thread tPersons;
 	Thread tMachine;
 
+	WoodWorker[] workers = new WoodWorker[3];
+	Workbench[] banches = new Workbench[2];
+
 
 	public synchronized void drawAnimation(JLabel src, JLabel dst, boolean ready){
 		ImageIcon img = getImage(ready);
@@ -128,12 +129,10 @@ public class mainGui {
 		br.setBounds(x, y, img.getIconWidth(), img.getIconHeight());
 		panel.add(br);
 		(new Thread(() -> {
-			
-			
 			for (int sx = x, sy = y, i = 0; i < n; sx += dx, sy += dy, i++) {
 				br.setVisible(true);
 				br.setLocation(sx, sy);
-				
+
 				try {
 					Thread.sleep(1000/60);
 				} catch (InterruptedException e) {
@@ -215,15 +214,15 @@ public class mainGui {
 		}
 	}
 
-	public void person_active(int timeOfWork,JLabel person,boolean flag) {
+	public void person_active(int timeOfWork,JLabel person,boolean flag,int num) {
 		if(!flag) {
 			person.setIcon(new ImageIcon(mainGui.class.getResource("/png/person.png")));
 		} else {
 			if (rc == null)
 				rc = new RawCollection((short)(int)spinner_7.getValue(), lblRaw, this,slider);
 			person.setIcon(new ImageIcon(mainGui.class.getResource("/gifs/person.gif")));
-			ww = new WoodWorker(timeOfWork,rc, person, this);
-			tPersons  = new Thread(ww);
+			workers[num] = new WoodWorker(timeOfWork,rc, person, this);;
+			tPersons  = new Thread(workers[num]);
 			tPersons.start();
 		}
 	}
@@ -257,7 +256,7 @@ public class mainGui {
 			}
 		}
 	}
-	public void machine_active(int timeOfWork,JLabel machine,boolean flag) {
+	public void machine_active(int timeOfWork,JLabel machine,boolean flag, int num ) {
 		if(!flag) {
 			machine.setIcon(new ImageIcon(mainGui.class.getResource("/png/Machine1.png")));
 		} else {
@@ -266,9 +265,9 @@ public class mainGui {
 			if (tc == null)
 				tc = new TimberCollection((short)(int)spinner_7_1.getValue(), gr, lblExportbox, this,slider_1);
 			//			machine.setIcon(new ImageIcon(mainGui.class.getResource("/gifs/Machine1.gif")));
-			wb = new Workbench(timeOfWork,rc,tc, machine, this,id);
+			banches[num] = new Workbench(timeOfWork,rc,tc, machine, this,id);
 			id++;
-			tMachine = new Thread(wb);
+			tMachine = new Thread(banches[num]);
 			tMachine.start();
 		}
 	}
@@ -570,6 +569,11 @@ public class mainGui {
 				spinner_4.setEnabled(false);
 				spinner_5.setEnabled(false);
 				spinner_6.setEnabled(false);
+				for (int i=0;i< workers.length;i++)
+					workers[i] = null;
+				for (int i=0;i< banches.length;i++)
+					banches[i] = null;
+				System.gc();
 				doRun();
 			}
 		});
@@ -580,7 +584,6 @@ public class mainGui {
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				status = false;
-				btnStart.setEnabled(true);
 				spinner.setEnabled(true);
 				spinner_1.setEnabled(true);
 				spinner_2.setEnabled(true);
@@ -592,7 +595,6 @@ public class mainGui {
 				spinner_7_1.setEnabled(false);
 				spinner_4_1.setEnabled(false);
 				spinner_4_1_1.setEnabled(false);
-
 				sound.stop();
 				onEndOfPlay();
 			}
@@ -628,6 +630,34 @@ public class mainGui {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
+		
+		JSeparator separator_1 = new JSeparator();
+		mnNewMenu.add(separator_1);
+		
+		JMenuItem emstopMenuItem = new JMenuItem("Emergency stop");
+		emstopMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int i=0;i< workers.length;i++)
+					workers[i] = null;
+				for (int i=0;i< banches.length;i++)
+					banches[i] = null;
+				tc = null;
+				rc = null;
+				gr = null;
+				spinner.setEnabled(true);
+				spinner_1.setEnabled(true);
+				spinner_2.setEnabled(true);
+				spinner_3.setEnabled(true);
+				spinner_4.setEnabled(true);
+				spinner_5.setEnabled(true);
+				spinner_6.setEnabled(true);
+				spinner_7.setEnabled(true);
+				spinner_7_1.setEnabled(true);
+				spinner_4_1.setEnabled(false);
+				spinner_4_1_1.setEnabled(false);
+			}
+		});
+		mnNewMenu.add(emstopMenuItem);
 
 		spinner_7 = new JSpinner();
 		spinner_7.setBounds(1100, 772, 62, 20);
@@ -682,11 +712,11 @@ public class mainGui {
 			car1_active(0);
 			car2_active(0);
 			rawbox_count(0);
-			person_active((int)spinner.getValue(),lblperson3, false);
-			person_active((int)spinner_1.getValue(),lblperson2, false);
-			person_active((int)spinner_2.getValue(),lblperson1, false);
-			machine_active((int)spinner_3.getValue(),lblMachine1, false);
-			machine_active((int)spinner_4.getValue(),lblMachine2, false);
+			person_active((int)spinner.getValue(),lblperson3, false,0);
+			person_active((int)spinner_1.getValue(),lblperson2, false,1);
+			person_active((int)spinner_2.getValue(),lblperson1, false,2);
+			machine_active((int)spinner_3.getValue(),lblMachine1, false,0);
+			machine_active((int)spinner_4.getValue(),lblMachine2, false,1);
 			lblExportbox.setIcon(new ImageIcon(urlExportbox));
 			lblRiver.setIcon(new ImageIcon(urlRiver));
 		}).start();
@@ -711,11 +741,11 @@ public class mainGui {
 		car1_active(1);
 		car2_active(1);
 		rawbox_count(0);
-		person_active((int)spinner.getValue(),lblperson3, true);
-		person_active((int)spinner_1.getValue(),lblperson2, true);
-		person_active((int)spinner_2.getValue(),lblperson1, true);
-		machine_active((int)spinner_3.getValue(),lblMachine1, true);
-		machine_active((int)spinner_4.getValue(),lblMachine2, true);
+		person_active((int)spinner.getValue(),lblperson3, true,0);
+		person_active((int)spinner_1.getValue(),lblperson2, true,1);
+		person_active((int)spinner_2.getValue(),lblperson1, true,2);
+		machine_active((int)spinner_3.getValue(),lblMachine1, true,0);
+		machine_active((int)spinner_4.getValue(),lblMachine2, true,1);
 	}
 
 	/*ќжидание завершени€ запущенных потоков
@@ -725,14 +755,16 @@ public class mainGui {
 		new Thread() {
 			public void run() {
 				try {
-					tMachine.join();
 					tPersons.join();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-
+				btnStart.setEnabled(true);
+				
 			}
 		}.start();
+		
+
 	}
 
 

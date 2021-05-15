@@ -29,7 +29,7 @@ public class Workbench extends AbstractWorker{
 	}
 
 	@Override
-	public synchronized void run() {
+	public synchronized void run(){
 		while (!Thread.interrupted()) {
 			try {
 				Random rnd = new Random();

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RawCollection extends AbstractCollection {
 
-	List<Integer> ready = new ArrayList<>(2);
+	public List<Integer> ready = new ArrayList<>(2);
 
 	public RawCollection(short maxLength, JLabel lbl, mainGui mg, JSlider slider) {
 		super(maxLength, lbl, mg,slider);
@@ -36,10 +36,10 @@ public class RawCollection extends AbstractCollection {
 			}
 		}
 
-		slider.setValue(raws.size());
 		raws.add(stem);
-		mg.rawbox_count(getSize());
 		setSliderValue();
+		mg.rawbox_count(getSize());
+		
 		
 		notify();
 	}
