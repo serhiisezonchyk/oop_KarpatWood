@@ -24,4 +24,5 @@ public abstract class AbstractWorker implements Runnable {
 
     @Override
     public abstract void run();
+    
 }

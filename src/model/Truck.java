@@ -26,6 +26,7 @@ public class Truck extends AbstractCollection{
             e.printStackTrace();
         }
         raws.removeAll(raws);
+        spinner.setValue(raws.size());
         mg.setCarActivity(lbl, 1);
         System.out.println("Truck has returned!" + this);
         isReady = true;

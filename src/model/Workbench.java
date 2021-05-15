@@ -55,18 +55,14 @@ public class Workbench extends AbstractWorker{
 					}
 					mg.drawAnimation(lbl, mg.lblExportbox,true);});
 				th.start();
-				
 				Thread.sleep(1000);
 				tc.raws.add(timber);
 				Thread.sleep(1000);
 				toString();
 				tc.setSliderValue();
-				
 				transport(timber);
 				System.out.println("Transported!" + timber);
 				rc.setUnReady(id);
-
-
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
