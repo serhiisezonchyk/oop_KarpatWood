@@ -756,6 +756,26 @@ public class mainGui {
 			public void run() {
 				try {
 					tPersons.join();
+					for (int i=0;i< workers.length;i++)
+						workers[i] = null;
+					for (int i=0;i< banches.length;i++)
+						banches[i] = null;
+					tc = null;
+					rc = null;
+					gr = null;
+					spinner.setEnabled(true);
+					spinner_1.setEnabled(true);
+					spinner_2.setEnabled(true);
+					spinner_3.setEnabled(true);
+					spinner_4.setEnabled(true);
+					spinner_5.setEnabled(true);
+					spinner_6.setEnabled(true);
+					spinner_7.setEnabled(true);
+					spinner_7_1.setEnabled(true);
+					spinner_4_1.setEnabled(false);
+					spinner_4_1_1.setEnabled(false);
+					id = 0;
+					System.gc();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

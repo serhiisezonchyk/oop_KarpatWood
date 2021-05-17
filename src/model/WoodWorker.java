@@ -55,8 +55,8 @@ public class WoodWorker extends AbstractWorker {
                 }
                 System.out.println("Produced!" + time + stem);
                 mg.drawAnimation(lbl, mg.lblRaw, false);
-                transport((Stem) stem);
                 Thread.sleep(time);
+                transport((Stem) stem);
                 
                 System.out.println("Transported!" + time + stem);
                 mg.setActivityWorker(lbl,true);

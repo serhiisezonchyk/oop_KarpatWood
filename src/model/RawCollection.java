@@ -61,7 +61,7 @@ public class RawCollection extends AbstractCollection {
 			}
 		}
 
-		Thread th = new Thread(() -> {mg.drawAnimation(lbl,ready.get(0) == 1 ? mg.lblMachine1 : mg.lblMachine2,false);ready.remove(0);});
+		Thread th = new Thread(() -> {mg.drawAnimation(lbl,ready.get(0) == 0 ? mg.lblMachine1 : mg.lblMachine2,false);setUnReady(ready.get(0));});
 		th.start();
 		try {
 			th.join();
